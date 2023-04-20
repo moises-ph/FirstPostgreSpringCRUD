@@ -5,6 +5,7 @@ import com.moisesph.mycrud.model.Book;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
 
@@ -12,6 +13,7 @@ import javax.sql.DataSource;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Map;
 
 @Repository
 public class BookRepository {
@@ -36,6 +38,24 @@ public class BookRepository {
                 new MapSqlParameterSource("name", newBook.name)
         );
     }
+
+    public boolean updateBook(Book newBook){
+        String sql = "update books set name = :name where id = :id";
+        MapSqlParameterSource parameterSource = new MapSqlParameterSource();
+        parameterSource.addValue("name", newBook.name);
+        parameterSource.addValue("id", newBook.id);
+        int result = namedParameterJdbcTemplate.update(sql, parameterSource);
+        return result > 0;
+    }
+
+    public boolean deleteBook(long id){
+        String sql = "delete from books where id = :id";
+
+        Map<String, ?> params = Map.of("id", id);
+        int result = namedParameterJdbcTemplate.update(sql,params);
+        return result > 0;
+    }
+
 
     private static class BookMapper implements RowMapper<Book>{
 

@@ -23,4 +23,6 @@ public class BookService {
     public long createBook(Book newBook){
         return repository.createBook(newBook);
     }
+    public boolean updateBook(Book newBook){ return repository.updateBook(newBook); }
+    public boolean deleteBook(Long id){ return repository.deleteBook(id); }
 }
